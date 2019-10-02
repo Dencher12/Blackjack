@@ -1,29 +1,46 @@
 class CardsPrinter
+  class << self
+    def print(names)
+      if names.size == 3
+        print3(names)
+        return
+      end 
 
-  def self.print(car1_name, car2_name)
-    spec_space1 = ''
-    spec_line1 = ''
-    spec_space2 = ''
-    spec_line2 = ''
+      syms1 = define_syms(names[0])
+      syms2 = define_syms(names[1])
 
-    if car1_name.size == 3
-      spec_space1 = ' '
-      spec_line1 = '_'
+      puts ''
+      puts "  ______#{syms1[1]}      ______#{syms2[1]}  "
+      puts " |      #{syms1[0]}|    |      #{syms2[0]}| "
+      puts " |      #{syms1[0]}|    |      #{syms2[0]}| "
+      puts " |  #{names[0]}  |    |  #{names[1]}  | "
+      puts " |      #{syms1[0]}|    |      #{syms2[0]}| "
+      puts " |______#{syms1[1]}|    |______#{syms2[1]}| "
+      puts ''
     end
 
-    if car2_name.size == 3
-      spec_space2 = ' '
-      spec_line2 = '_'
+    def print3(names)
+      syms1 = define_syms(names[0])
+      syms2 = define_syms(names[1])
+      syms3 = define_syms(names[2])
+
+      puts ''
+      puts "  ______#{syms1[1]}      ______#{syms2[1]}      ______#{syms3[1]}     "
+      puts " |      #{syms1[0]}|    |      #{syms2[0]}|    |      #{syms3[0]}|       "
+      puts " |      #{syms1[0]}|    |      #{syms2[0]}|    |      #{syms3[0]}|        "
+      puts " |  #{names[0]}  |    |  #{names[1]}  |    |  #{names[2]}  |         "
+      puts " |      #{syms1[0]}|    |      #{syms2[0]}|    |      #{syms3[0]}|       "
+      puts " |______#{syms1[1]}|    |______#{syms2[1]}|    |______#{syms3[1]}|       "
+      puts ''
     end
 
-    puts ''
-    puts "  ______#{spec_line1}      ______#{spec_line2}  "
-    puts " |      #{spec_space1}|    |      #{spec_space2}| "
-    puts " |      #{spec_space1}|    |      #{spec_space2}| "
-    puts " |  #{car1_name}  |    |  #{car2_name}  | "
-    puts " |      #{spec_space1}|    |      #{spec_space2}| "
-    puts " |______#{spec_line1}|    |______#{spec_line2}| "
-    puts ''
-
+    def define_syms(name)
+      return [' ', '_'] if name.size == 3
+      return ['', ''] if name.size == 2
+    end
   end
 end
+
+
+       
+
