@@ -1,9 +1,9 @@
 class Player
-  attr_accessor :name, :money, :cards
+  attr_accessor :name, :bankroll, :cards
 
   def initialize(name)
     @name = name
-    @money = 100
+    @bankroll = 100
     @score = 0
     @cards = []
   end
@@ -11,5 +11,5 @@ class Player
   def score
     @score = ScoreCounter.count_score(cards)
     @score
-  end  
+  end
 end

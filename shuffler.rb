@@ -14,8 +14,8 @@ class Shuffler
   end
 
   def pull(amount)
-    res = @deck[0..amount-1]
-    @deck.slice!(0..amount-1)
+    res = @deck[0..amount - 1]
+    @deck.slice!(0..amount - 1)
     res
   end
 end
