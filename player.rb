@@ -1,15 +1,20 @@
 class Player
   attr_accessor :name, :bankroll, :cards
 
-  def initialize(name)
+  def initialize(name, shuffler)
     @name = name
     @bankroll = 100
-    @score = 0
+    @points = 0
     @cards = []
+    @shuffler = shuffler
   end
 
-  def score
-    @score = ScoreCounter.count_score(cards)
-    @score
+  def points
+    @points = PointsCounter.count_points(cards)
+    @points
+  end
+
+  def hit
+    @cards += @shuffler.pull(1)
   end
 end

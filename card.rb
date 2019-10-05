@@ -1,5 +1,5 @@
 class Card
-  attr_reader :type, :value
+  attr_reader :name, :type, :value, :points
 
   NUM_PATTERN = /^(10|[2-9])[♣♦♥♠]{1}$/.freeze
   IMG_PATTERN = /^[ВДК][♣♦♥♠]{1}$/.freeze
@@ -17,6 +17,7 @@ class Card
     else
       raise "#{name} - нет такой карты!"
     end
+    #@points = PointsCounter.count_points(self)
   end
 
   private

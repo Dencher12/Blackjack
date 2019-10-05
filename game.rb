@@ -1,12 +1,12 @@
-require_relative 'score_counter'
+require_relative 'points_counter'
 require_relative 'cards_printer'
 require_relative 'shuffler'
 require_relative 'dealer'
 
 class Game
-  def initialize(player)
+  def initialize(player, dealer)
     @player = player
-    @dealer = Dealer.new
+    @dealer = dealer
 
     @moves = {
       hit: -> { send(:hit) },
@@ -20,35 +20,69 @@ class Game
     @player.cards = @shuffler.pull(2)
     @dealer.cards = @shuffler.pull(2)
 
-    print_dealer_info
-    print_player_info
-
+    print_info
     move_to_player
   end
 
-  def print_player_info
+  def print_player_info()
     puts ''
     print ' Ваши карты:'
     CardsPrinter.print(@player.cards)
-    puts " ОЧКИ: #{@player.score}"
+    puts " ОЧКИ: #{@player.points}"
     puts ''
   end
 
-  def print_dealer_info
+  def print_dealer_info(hidden)
     puts ''
     print ' Карты дилера:'
-    CardsPrinter.print(@dealer.cards, true)
+    CardsPrinter.print(@dealer.cards, hidden)
+    puts " ОЧКИ: #{@dealer.points}" unless hidden
     puts ''
   end
+
+  def print_info(hidden = true)
+    print_dealer_info(hidden)
+    print_player_info
+  end
+
+  private
 
   def move_to_player
     puts "#{@player.name}, каков будет Ваш ход?"
-    @moves[gets.chomp.to_sym].call
+    move = gets.chomp
+    raise 'Неизвестная команда' if move !~ /hit|stand|open/
+
+    hit(@player) if move == 'hit'
+    if move == 'open'
+      open
+      return
+    end
+
+    move_to_dealer
+  rescue StandardError => e
+    puts e.message
+    retry
   end
 
-  def hit
-    @player.cards = @player.cards + @shuffler.pull(1)
-    print_dealer_info
-    print_player_info
+  def move_to_dealer
+    move = @dealer.make_move
+    hit(@dealer) if move == 'hit'
+    move_to_player
+  end
+
+  def hit(member)
+    member.hit
+    print_info
+  end
+
+  def open
+    print_info(false)
+    if @player.points > @dealer.points && @player.points <= 21
+      puts 'Вы выйграли!'
+    elsif @dealer.points > 21
+      puts 'Ничья!'
+    else
+      puts 'Вы проиграли!'
+    end
   end
 end
