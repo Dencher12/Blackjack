@@ -1,24 +1,20 @@
 class Shuffler
   attr_accessor :deck
+
   def initialize
-    card_names = [
+    @deck = [
       'Т♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'В♣', 'Д♣', 'К♣',
       'Т♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'В♦', 'Д♦', 'К♦',
       'Т♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'В♥', 'Д♥', 'К♥',
       'Т♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'В♠', 'Д♠', 'К♠'
-    ]
-    @deck = card_names.map { |card_name| Card.new(card_name) }
-    shuffle
-  end
+    ].map { |card_name| Card.new(card_name) }
 
-  def shuffle
     @deck.shuffle!
   end
 
   def pull(amount)
     res = @deck[0..amount - 1]
     @deck.slice!(0..amount - 1)
-    puts "Колода: #{@deck.size}"
     res
   end
 end

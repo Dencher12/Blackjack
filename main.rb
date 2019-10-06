@@ -3,23 +3,24 @@ require_relative 'dealer'
 require_relative 'game'
 
 puts 'Добро пожаловать в Blackjack!'
+puts ''
+puts 'Команды:'
+puts 'hit - взять карту и вызвать open'
+puts 'stand - пропустить ход'
+puts 'open - отрыть карты и закончить игру'
+puts ''
+
 print 'Будте добры ввести Ваше имя: '
 
-shuffler = Shuffler.new
-player = Player.new(gets.chomp, shuffler)
-dealer = Dealer.new(shuffler)
+player = Player.new(gets.chomp)
+dealer = Dealer.new
 
-puts "Превосходно, #{player.name}, у вас есть #{player.bankroll}$"
-puts 'Ваша цель - стать БОГАТЫМ, а если Вы уже БОГАТЫ, то ещё БОГАЧЕ!!!'
 
-game = Game.new(player, dealer, shuffler)
-game.start
+Game.start(player, dealer)
 
 loop do
   puts 'Ещё разок? (н/n - нет, остальное - да)'
   break if gets.chomp =~ /[nн]/i
 
-  shuffler = Shuffler.new
-  game = Game.new(player, dealer, shuffler)
-  game.start
+  Game.start(player, dealer)
 end
