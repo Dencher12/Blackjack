@@ -12,12 +12,14 @@ dealer = Dealer.new(shuffler)
 puts "Превосходно, #{player.name}, у вас есть #{player.bankroll}$"
 puts 'Ваша цель - стать БОГАТЫМ, а если Вы уже БОГАТЫ, то ещё БОГАЧЕ!!!'
 
-game = Game.new(player, dealer)
+game = Game.new(player, dealer, shuffler)
 game.start
 
 loop do
   puts 'Ещё разок? (н/n - нет, остальное - да)'
   break if gets.chomp =~ /[nн]/i
 
+  shuffler = Shuffler.new
+  game = Game.new(player, dealer, shuffler)
   game.start
 end

@@ -17,7 +17,7 @@ class Card
     else
       raise "#{name} - нет такой карты!"
     end
-    #@points = PointsCounter.count_points(self)
+    @points = PointsCounter.count_points([self])
   end
 
   private

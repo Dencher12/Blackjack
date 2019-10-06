@@ -2,10 +2,10 @@ require_relative 'card'
 
 class PointsCounter
   class << self
-    def count_points(card)
+    def count_points(cards)
       @sum = 0
       @aces = 0
-      @cards = card
+      @cards = cards
       count
       append_aces
       @sum

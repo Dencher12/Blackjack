@@ -4,9 +4,10 @@ require_relative 'shuffler'
 require_relative 'dealer'
 
 class Game
-  def initialize(player, dealer)
+  def initialize(player, dealer, shuffler)
     @player = player
     @dealer = dealer
+    @shuffler = shuffler
 
     @moves = {
       hit: -> { send(:hit) },
@@ -16,9 +17,11 @@ class Game
   end
 
   def start
-    @shuffler = Shuffler.new
     @player.cards = @shuffler.pull(2)
     @dealer.cards = @shuffler.pull(2)
+
+    @player.bankroll -= 10
+    @dealer.bankroll -= 10
 
     print_info
     move_to_player
@@ -52,13 +55,9 @@ class Game
     move = gets.chomp
     raise 'Неизвестная команда' if move !~ /hit|stand|open/
 
-    hit(@player) if move == 'hit'
-    if move == 'open'
-      open
-      return
-    end
-
-    move_to_dealer
+    player_hit if move == 'hit'
+    open if move == 'open'
+    move_to_dealer if move == 'stand'
   rescue StandardError => e
     puts e.message
     retry
@@ -66,23 +65,38 @@ class Game
 
   def move_to_dealer
     move = @dealer.make_move
-    hit(@dealer) if move == 'hit'
+    dealer_hit if move == 'hit'
     move_to_player
   end
 
-  def hit(member)
-    member.hit
+  def player_hit
+    if @player.cards.size < 3
+      @player.hit
+      print_info
+      open
+    else
+      puts 'У Вас уже 3 карты'
+    end
+  end
+
+  def dealer_hit
+    return if @dealer.cards.size < 3
+
+    @dealer.hit
     print_info
   end
 
   def open
+    pp = @player.points
+    dp = @dealer.points
     print_info(false)
-    if @player.points > @dealer.points && @player.points <= 21
-      puts 'Вы выйграли!'
-    elsif @dealer.points > 21
+    if (pp > dp || dp > 21) && pp <= 21
+      puts "Вы выйграли! 20$ ваши, у Вас #{@player.bankroll += 20}$"
+    elsif dp > 21 || dp == pp
       puts 'Ничья!'
     else
-      puts 'Вы проиграли!'
+      @dealer.bankroll += 20
+      puts "Вы проиграли! У Вас #{@player.bankroll}$"
     end
   end
 end
